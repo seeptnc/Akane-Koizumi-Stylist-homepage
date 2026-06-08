@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AKANE KOIZUMI — Stylist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;1,300&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #f8f5f1;
+      --fg:       #18180f;
+      --accent:   #b85c3a;
+      --muted:    #88887e;
+      --border:   rgba(24,24,15,0.08);
+      --dark-bg:  #0d0d0b;
+      --dark-fg:  #e5e2db;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+
+    /* ════════════════════════════
+       NAV
+    ════════════════════════════ */
+    #mainNav {
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: 1000;
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+      transition: color .35s ease, background .35s ease, backdrop-filter .35s ease;
+    }
+    #mainNav.solid {
+      color: var(--fg);
+      background: rgba(248,245,241,0.94);
+      backdrop-filter: blur(14px);
+    }
+    #mainNav.menu-open { color: var(--fg); }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .9rem;
+      font-weight: 400;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: inherit;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: .62rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: inherit;
+      transition: opacity .2s;
+    }
+    .nav-links a:hover { opacity: .5; }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: currentColor;
+      transition: transform .3s, opacity .3s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* Mobile overlay menu */
+    #mobileMenu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: var(--bg);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.2rem;
+    }
+    #mobileMenu.open { display: flex; }
+    #mobileMenu a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      font-weight: 300;
+      letter-spacing: .06em;
+      text-decoration: none;
+      color: var(--fg);
+      transition: color .2s;
+    }
+    #mobileMenu a:hover { color: var(--accent); }
+
+    /* ════════════════════════════
+       HERO
+    ════════════════════════════ */
+    #home {
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+    }
+    .hero-veil {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(155deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.55) 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 3rem 5.5rem;
+    }
+    .hero-eyebrow {
+      font-size: .58rem;
+      letter-spacing: .38em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.5);
+      margin-bottom: 1.1rem;
+    }
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.8rem, 9vw, 9rem);
+      font-weight: 300;
+      letter-spacing: .05em;
+      line-height: .95;
+      color: #fff;
+    }
+    .hero-name em { font-style: italic; }
+
+    /* ════════════════════════════
+       SHARED TOKENS
+    ════════════════════════════ */
+    .label {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-size: .56rem;
+      letter-spacing: .36em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+    .label::before {
+      content: '';
+      display: block;
+      width: 26px;
+      height: 1px;
+      flex-shrink: 0;
+      background: var(--muted);
+    }
+    .display {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: .02em;
+    }
+    .display em { font-style: italic; }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ════════════════════════════
+       ABOUT
+    ════════════════════════════ */
+    #about {
+      padding: 9rem 3rem 8rem;
+    }
+    .about-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .about-text { padding-top: .5rem; }
+    .about-h { font-size: clamp(2.2rem, 4vw, 4rem); margin-bottom: 2.5rem; }
+    .about-bio {
+      font-size: .9rem;
+      line-height: 2;
+      color: #4a4a3f;
+      margin-bottom: 3rem;
+    }
+    .timeline {
+      list-style: none;
+      border-top: 1px solid var(--border);
+    }
+    .timeline li {
+      display: flex;
+      gap: 2rem;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: .82rem;
+      align-items: baseline;
+    }
+    .tl-year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .9rem;
+      color: var(--muted);
+      min-width: 3.5rem;
+      letter-spacing: .03em;
+    }
+    .tl-desc { color: var(--fg); line-height: 1.6; }
+
+    /* ════════════════════════════
+       STYLING WORKS
+    ════════════════════════════ */
+    #works {
+      padding: 8rem 3rem;
+      background: #f0ece4;
+    }
+    .works-inner { max-width: 1280px; margin: 0 auto; }
+    .works-header { margin-bottom: 3.5rem; }
+    .works-h { font-size: clamp(2.5rem, 5vw, 5rem); }
+
+    .works-grid {
+      columns: 3;
+      column-gap: 1.2rem;
+    }
+    .work-item {
+      break-inside: avoid;
+      margin-bottom: 1.2rem;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .work-item img {
+      width: 100%;
+      transition: transform .7s cubic-bezier(.25,.46,.45,.94);
+    }
+    .work-item:hover img { transform: scale(1.05); }
+    .work-cap {
+      position: absolute;
+      inset-block-end: 0;
+      inset-inline: 0;
+      padding: 2rem 1rem 1rem;
+      background: linear-gradient(to top, rgba(0,0,0,.5), transparent);
+      color: #fff;
+      font-size: .58rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .work-item:hover .work-cap { opacity: 1; }
+
+    /* ════════════════════════════
+       THE NEW CHAPTER
+    ════════════════════════════ */
+    #new-chapter {
+      padding: 8rem 3rem;
+      background: var(--dark-bg);
+      color: var(--dark-fg);
+    }
+    .chapter-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8rem;
+      align-items: center;
+    }
+    .chapter-photo {
+      width: 100%;
+      aspect-ratio: 2/3;
+      object-fit: cover;
+      filter: brightness(.8) contrast(1.05);
+    }
+    .chapter-label {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-size: .56rem;
+      letter-spacing: .36em;
+      text-transform: uppercase;
+      color: rgba(229,226,219,.45);
+      margin-bottom: 1.5rem;
+    }
+    .chapter-label::before {
+      content: '';
+      display: block;
+      width: 26px;
+      height: 1px;
+      flex-shrink: 0;
+      background: rgba(229,226,219,.45);
+    }
+    .chapter-h {
+      font-size: clamp(2.8rem, 5vw, 5.5rem);
+      color: var(--dark-fg);
+      margin-bottom: 2.5rem;
+    }
+    .chapter-body {
+      font-size: .88rem;
+      line-height: 2;
+      color: rgba(229,226,219,.65);
+      margin-bottom: 3rem;
+    }
+    .btn-outline {
+      display: inline-block;
+      padding: .95rem 2.5rem;
+      border: 1px solid rgba(229,226,219,.35);
+      font-size: .6rem;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--dark-fg);
+      transition: border-color .3s, background .3s, color .3s;
+    }
+    .btn-outline:hover {
+      border-color: var(--dark-fg);
+      background: var(--dark-fg);
+      color: var(--dark-bg);
+    }
+
+    /* ════════════════════════════
+       CONTACT
+    ════════════════════════════ */
+    #contact {
+      padding: 9rem 3rem 8rem;
+      text-align: center;
+    }
+    .contact-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .contact-label {
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
+      font-size: .56rem;
+      letter-spacing: .36em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+    .contact-label::before {
+      content: '';
+      display: block;
+      width: 26px;
+      height: 1px;
+      background: var(--muted);
+    }
+    .contact-h { font-size: clamp(3rem, 7vw, 6.5rem); margin-bottom: 2rem; }
+    .contact-note {
+      font-size: .88rem;
+      line-height: 1.9;
+      color: var(--muted);
+      margin-bottom: 3rem;
+    }
+    .contact-email {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      letter-spacing: .06em;
+      text-decoration: none;
+      color: var(--fg);
+      border-bottom: 1px solid var(--fg);
+      padding-bottom: 2px;
+      display: inline-block;
+      margin-bottom: 4rem;
+      transition: color .25s, border-color .25s;
+    }
+    .contact-email:hover { color: var(--accent); border-color: var(--accent); }
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .socials a {
+      font-size: .58rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      transition: color .2s;
+    }
+    .socials a:hover { color: var(--fg); }
+
+    /* ════════════════════════════
+       CONTACT FORM
+    ════════════════════════════ */
+    .contact-form {
+      width: 100%;
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      text-align: left;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: .55rem;
+    }
+    .form-field label {
+      font-size: .58rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .form-field input,
+    .form-field textarea {
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: .7rem 0;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: .9rem;
+      color: var(--fg);
+      outline: none;
+      width: 100%;
+      transition: border-color .25s;
+      border-radius: 0;
+    }
+    .form-field input:focus,
+    .form-field textarea:focus { border-bottom-color: var(--fg); }
+    .form-field textarea {
+      resize: vertical;
+      min-height: 160px;
+      line-height: 1.7;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      background: none;
+      border: 1px solid var(--border);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: .6rem;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--fg);
+      cursor: pointer;
+      transition: background .3s, color .3s, border-color .3s;
+    }
+    .btn-submit:hover {
+      background: var(--fg);
+      color: var(--bg);
+      border-color: var(--fg);
+    }
+    @media (max-width: 560px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    .btn-submit:disabled {
+      opacity: .3;
+      cursor: not-allowed;
+    }
+    .form-success {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 300;
+      line-height: 2;
+      color: var(--fg);
+      padding: 3rem 0;
+    }
+
+    /* ════════════════════════════
+       FOOTER
+    ════════════════════════════ */
+    footer {
+      padding: 1.75rem 3rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .58rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ════════════════════════════
+       RESPONSIVE
+    ════════════════════════════ */
+    @media (max-width: 960px) {
+      #mainNav { padding: 1.25rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+
+      #about { padding: 6rem 1.5rem 5rem; }
+      .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-photo { aspect-ratio: 4/3; }
+
+      #works { padding: 5rem 1.5rem; }
+      .works-grid { columns: 2; }
+
+      #new-chapter { padding: 5rem 1.5rem; }
+      .chapter-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .chapter-photo { aspect-ratio: 16/9; object-position: center 70%; }
+
+      #contact { padding: 6rem 1.5rem 5rem; }
+
+      .hero-content { padding: 0 1.5rem 3.5rem; }
+      footer { padding: 1.5rem; flex-direction: column; gap: .5rem; text-align: center; }
+    }
+
+    @media (max-width: 540px) {
+      .works-grid { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav id="mainNav">
+    <a href="#home" class="nav-logo">Akane Koizumi</a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#works">Works</a></li>
+      <li><a href="#new-chapter">THE NEW CHAPTER</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="menuToggle" aria-label="メニューを開く">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div id="mobileMenu">
+    <a href="#home"        class="ml">Home</a>
+    <a href="#about"       class="ml">About</a>
+    <a href="#works"       class="ml">Works</a>
+    <a href="#new-chapter" class="ml">THE NEW CHAPTER</a>
+    <a href="#contact"     class="ml">Contact</a>
+  </div>
+
+  <!-- ── HOME ── -->
+  <section id="home" data-screen-label="Home">
+    <img src="image/1.jpg" alt="AKANE KOIZUMI — Styling work" class="hero-bg">
+    <div class="hero-veil"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Stylist &ensp;/&ensp; Tokyo</p>
+      <h1 class="hero-name">AKANE<br><em>KOIZUMI</em></h1>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section id="about" data-screen-label="About">
+    <div class="about-inner">
+      <div class="about-text reveal">
+        <p class="label">01 &ensp; About</p>
+        <h2 class="display about-h">Fashion Stylist<br><em>THE NEW CHAPTER</em> founder<br><br>AKANE KOIZUMI</h2>
+        <p class="about-bio">
+          アシスタントとしてキャリアをスタートし、ファッションスタイリストとして独立。国内外のトップブランドやクリエイターとのコラボレーションを重ねてきた。ミニマルな美意識と大胆なエディトリアル感覚が融合した、独自の世界観を持つ。
+        </p>
+        <ul class="timeline">
+          <li>
+            <span class="tl-year">2011</span>
+            <span class="tl-desc">アシスタントを経てファッションスタイリストとして独立。おもにファッション誌、広告で活動</span>
+          </li>
+          <li>
+            <span class="tl-year">2020</span>
+            <span class="tl-desc">結婚での改姓を機に、社会での性役割やメディアによる影響に向き合うようになる</span>
+          </li>
+          <li>
+            <span class="tl-year">2022</span>
+            <span class="tl-desc">ルッキズム、ボディポジティブ、ジェンダーについてのコラムを始める</span>
+          </li>
+          <li>
+            <span class="tl-year">2023</span>
+            <span class="tl-desc">セクシャルウェルネスに基づいたmodern adult brand「THE NEW CHAPTER」を立ち上げる。合同会社Seep設立</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STYLING WORKS ── -->
+  <section id="works" data-screen-label="Styling Works">
+    <div class="works-inner">
+      <div class="works-header reveal">
+        <p class="label">02 &ensp; Selected Works</p>
+        <h2 class="display works-h">Styling Works</h2>
+      </div>
+      <div class="works-grid">
+        <div class="work-item reveal">
+          <img src="image/4.JPG" alt="Editorial — checkered dress">
+          <div class="work-cap">Editorial</div>
+        </div>
+        <div class="work-item reveal">
+          <img src="image/7.JPG" alt="Editorial — architectural">
+          <div class="work-cap">Editorial</div>
+        </div>
+        <div class="work-item reveal">
+          <img src="image/3.JPG" alt="Street Style">
+          <div class="work-cap">Street Style</div>
+        </div>
+        <div class="work-item reveal">
+          <img src="image/1.jpg" alt="Editorial — orchids">
+          <div class="work-cap">Editorial</div>
+        </div>
+        <div class="work-item reveal">
+          <img src="image/2.JPG" alt="Campaign — nature">
+          <div class="work-cap">Campaign</div>
+        </div>
+        <div class="work-item reveal">
+          <img src="image/6.jpeg" alt="Portrait">
+          <div class="work-cap">Portrait</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── THE NEW CHAPTER ── -->
+  <section id="new-chapter" data-screen-label="The New Chapter">
+    <div class="chapter-inner">
+      <div class="reveal">
+        <picture>
+          <source media="(max-width: 960px)" srcset="uploads/TNC_hero_mobile.jpg">
+          <img src="image/TNC/TNC_hero.png" alt="THE NEW CHAPTER" class="chapter-photo">
+        </picture>
+      </div>
+      <div class="reveal">
+        <p class="chapter-label">03 &ensp; New Brand</p>
+        <h2 class="display chapter-h">THE NEW CHAPTER</h2>
+        <p class="chapter-body">
+          <span style="font-family:'Noto Serif JP',serif;font-weight:300;">ようこそ、あなたの新しい章へ<br>
+          一度知ってしまうと知らなかったころにはもう戻れない<br>
+          でももう知ってしまったあなたへ<br>
+          自らここにたどり着いたあなたへ</span><br><br>
+          THE NEW CHAPTERは「自分のままでいられる」をテーマに、国産オーガニックを用いたセクシャルウェルネスブランドです。
+          <br><br>
+          スタイリストとしての視点から「身にまとうもの」のもつ力を信じてきた小泉茜が、その哲学をより深く、よりパーソナルな領域へと広げた新たな章。
+        </p>
+        <a href="the-new-chapter.html" class="btn-outline">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="contact" data-screen-label="Contact">
+    <div class="contact-inner reveal">
+      <p class="contact-label">04 &ensp; Contact</p>
+      <h2 class="display contact-h">Get in<br><em>Touch</em></h2>
+      <p class="contact-note">
+        お仕事のご依頼・ご相談はメールにてお気軽にどうぞ。<br>
+        For work inquiries, please reach out via email.
+      </p>
+      <a href="mailto:akanekoizumi06@gmail.com" class="contact-email">akanekoizumi06@gmail.com</a>
+      <!-- Contact Form -->
+      <form class="contact-form" id="contactForm">
+        <input type="hidden" name="_captcha" value="false">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="f-name">Name *</label>
+            <input type="text" id="f-name" name="name" required autocomplete="name">
+          </div>
+          <div class="form-field">
+            <label for="f-email">Email *</label>
+            <input type="email" id="f-email" name="email" required autocomplete="email">
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="f-subject">Subject *</label>
+          <input type="text" id="f-subject" name="subject" required>
+        </div>
+        <div class="form-field">
+          <label for="f-message">Message</label>
+          <textarea id="f-message" name="message" placeholder="Leave me a message..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit" id="submitBtn" disabled>Submit</button>
+      </form>
+
+      <ul class="socials" style="margin-top: 3.5rem;">
+        <li><a href="https://www.instagram.com/akane_koizumi_?igsh=aGV2d3VoZ2Q5OWYz" target="_blank" rel="noopener">Instagram</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Akane Koizumi</span>
+    <span>Stylist &ensp;/&ensp; Tokyo, Japan</span>
+  </footer>
+
+  <script>
+    /* NAV — transparent on hero, solid on scroll */
+    const nav   = document.getElementById('mainNav');
+    const toggle = document.getElementById('menuToggle');
+    const menu  = document.getElementById('mobileMenu');
+
+    function syncNav() {
+      nav.classList.toggle('solid', window.scrollY > 60);
+    }
+    window.addEventListener('scroll', syncNav, { passive: true });
+    syncNav();
+
+    /* Hamburger */
+    toggle.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      nav.classList.toggle('menu-open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+
+    document.querySelectorAll('.ml').forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.remove('open');
+        toggle.classList.remove('open');
+        nav.classList.remove('menu-open');
+        document.body.style.overflow = '';
+      });
+    });
+
+    /* Scroll reveal */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach((el, i) => {
+      el.style.transitionDelay = (i % 3) * 80 + 'ms';
+      io.observe(el);
+    });
+
+    /* Contact form — required validation + FormSubmit AJAX */
+    const submitBtn = document.getElementById('submitBtn');
+    const watchIds  = ['f-name', 'f-email', 'f-subject'];
+
+    function syncBtn() {
+      const ok = watchIds.every(id => document.getElementById(id).value.trim() !== '');
+      submitBtn.disabled = !ok;
+    }
+    watchIds.forEach(id => document.getElementById(id).addEventListener('input', syncBtn));
+
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
+
+      const data = new FormData(this);
+      try {
+        const res = await fetch('https://formsubmit.co/ajax/akanekoizumi06@gmail.com', {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          this.innerHTML = '<p class="form-success">送信しました。ありがとうございます！<br>Thank you — your message has been sent.</p>';
+        } else {
+          submitBtn.textContent = 'Submit';
+          syncBtn();
+          alert('送信に失敗しました。直接メールをお送りください。');
+        }
+      } catch(err) {
+        submitBtn.textContent = 'Submit';
+        syncBtn();
+        alert('送信に失敗しました。直接メールをお送りください。');
+      }
+    });
+  </script>
+</body>
+</html>

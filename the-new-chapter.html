@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE NEW CHAPTER — AKANE KOIZUMI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #0d0d0b;
+      --fg:     #e5e2db;
+      --fg2:    rgba(229,226,219,.7);
+      --fg3:    rgba(229,226,219,.38);
+      --border: rgba(229,226,219,.1);
+      --accent: #c8a882;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+
+    /* ── BACKGROUND-IMAGE SECTION PATTERN ── */
+    .bg-section {
+      position: relative;
+      isolation: isolate;
+    }
+    /* The faded background image */
+    .bg-section .bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0.25;
+      z-index: -1;
+      pointer-events: none;
+    }
+    /* Dark veil for extra legibility */
+    .bg-section .bg-veil {
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      opacity: 0.55;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    #topNav {
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: 200;
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background .35s, backdrop-filter .35s;
+    }
+    #topNav.solid {
+      background: rgba(13,13,11,.92);
+      backdrop-filter: blur(14px);
+    }
+    .nav-back {
+      font-size: .6rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg3);
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      transition: color .2s;
+    }
+    .nav-back::before { content: '←'; font-size: .7rem; }
+    .nav-back:hover { color: var(--fg); }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .82rem;
+      font-weight: 400;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--fg);
+    }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+      display: flex;
+      align-items: flex-end;
+    }
+    .hero-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .hero-veil {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(13,13,11,.1) 0%, rgba(13,13,11,.72) 100%);
+    }
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      padding: 0 3rem 5.5rem;
+    }
+    .hero-eyebrow {
+      font-size: .54rem;
+      letter-spacing: .42em;
+      text-transform: uppercase;
+      color: rgba(229,226,219,.45);
+      margin-bottom: 1rem;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 8vw, 8.5rem);
+      font-weight: 300;
+      letter-spacing: .06em;
+      line-height: .93;
+      color: var(--fg);
+    }
+
+    /* ── SHARED TOKENS ── */
+    .label {
+      font-size: .54rem;
+      letter-spacing: .38em;
+      text-transform: uppercase;
+      color: var(--fg3);
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.5rem;
+    }
+    .label::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      flex-shrink: 0;
+      background: var(--fg3);
+    }
+    .display {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: .03em;
+    }
+    .display em { font-style: italic; }
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ── INTRO (Poetry) ── */
+    /* BG: TNC_2 (body) */
+    #intro {
+      padding: 9rem 3rem 8rem;
+      border-top: 1px solid var(--border);
+    }
+    .intro-inner {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .intro-jp {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.05rem, 2.3vw, 1.45rem);
+      font-weight: 300;
+      line-height: 2.3;
+      color: var(--fg);
+      margin-bottom: 1rem;
+    }
+    .divider {
+      width: 36px; height: 1px;
+      background: var(--fg3);
+      margin: 3rem 0;
+    }
+    .intro-en {
+      font-size: .86rem;
+      line-height: 2.1;
+      color: var(--fg2);
+      font-style: italic;
+    }
+
+    /* ── ABOUT ── */
+    /* BG: TNC_6 (lotion product) */
+    #about {
+      padding: 8rem 3rem;
+      border-top: 1px solid var(--border);
+    }
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 7rem;
+      align-items: start;
+    }
+    .about-h {
+      font-size: clamp(2rem, 4vw, 3.8rem);
+      margin-bottom: 2.5rem;
+    }
+    .about-body {
+      font-size: .9rem;
+      line-height: 2;
+      color: var(--fg2);
+      margin-bottom: 1.75rem;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      margin-top: 2.5rem;
+    }
+    .tag {
+      padding: .42rem .95rem;
+      border: 1px solid var(--border);
+      font-size: .58rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--fg3);
+    }
+    /* Right column product image */
+    .about-product-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* ── GALLERY STRIP ── */
+    /* TNC_1, TNC_3, TNC_7 — pure images, no text */
+    #gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .gallery-item {
+      overflow: hidden;
+      aspect-ratio: 2/3;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform .8s cubic-bezier(.25,.46,.45,.94);
+    }
+    .gallery-item:hover img { transform: scale(1.04); }
+
+    /* ── VISION ── */
+    /* BG: TNC_5 (nautilus) */
+    #vision {
+      padding: 8rem 3rem;
+      border-top: 1px solid var(--border);
+    }
+    .vision-inner { max-width: 1100px; margin: 0 auto; }
+    .vision-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+      margin-bottom: 5rem;
+    }
+    .vision-h {
+      font-size: clamp(2.5rem, 5vw, 5rem);
+    }
+    .vision-themes {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      padding-top: .5rem;
+    }
+    .vision-theme {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 300;
+      letter-spacing: .06em;
+      color: var(--fg2);
+      padding-left: 1.4rem;
+      border-left: 1px solid var(--accent);
+    }
+    .vision-body {
+      font-size: .9rem;
+      line-height: 2.1;
+      color: var(--fg2);
+      max-width: 720px;
+    }
+
+    /* ── CLOSING POEM + CTA ── */
+    /* BG: TNC_1 (dark still life) */
+    #poem {
+      padding: 9rem 3rem 8rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .poem-inner { max-width: 620px; margin: 0 auto; }
+    .poem-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.55rem);
+      font-weight: 300;
+      line-height: 2.2;
+      color: var(--fg);
+      margin-bottom: 4rem;
+    }
+    .poem-close {
+      font-size: .88rem;
+      line-height: 2.1;
+      color: var(--fg2);
+      margin-bottom: 5rem;
+    }
+    .cta-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .cta-note {
+      font-size: .56rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--fg3);
+    }
+    .btn-shop {
+      display: inline-block;
+      padding: 1.1rem 3.5rem;
+      border: 1px solid rgba(229,226,219,.38);
+      font-size: .6rem;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg);
+      transition: border-color .3s, background .3s, color .3s;
+    }
+    .btn-shop:hover {
+      border-color: var(--fg);
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2rem 3rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .57rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--fg3);
+    }
+    footer a { color: var(--fg3); text-decoration: none; transition: color .2s; }
+    footer a:hover { color: var(--fg); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      #topNav { padding: 1.25rem 1.5rem; }
+      #hero .hero-text { padding: 0 1.5rem 3.5rem; }
+      #intro { padding: 6rem 1.5rem 5rem; }
+      #about { padding: 5rem 1.5rem; }
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .about-product-img { aspect-ratio: 4/3; }
+      #gallery { grid-template-columns: 1fr 1fr; }
+      #gallery .gallery-item:last-child { display: none; }
+      #vision { padding: 5rem 1.5rem; }
+      .vision-top { grid-template-columns: 1fr; gap: 2.5rem; }
+      #poem { padding: 5rem 1.5rem 4rem; }
+      footer { padding: 1.5rem; flex-direction: column; gap: .5rem; text-align: center; }
+    }
+
+    @media (max-width: 560px) {
+      #gallery { grid-template-columns: 1fr; }
+      #gallery .gallery-item:last-child { display: block; }
+      .gallery-item { aspect-ratio: 3/2; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="topNav">
+    <a href="index.html" class="nav-back">Akane Koizumi</a>
+    <span class="nav-brand">The New Chapter</span>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <img src="uploads/TNC_hero.png" alt="THE NEW CHAPTER" class="hero-photo">
+    <div class="hero-veil"></div>
+    <div class="hero-text">
+      <p class="hero-eyebrow">Modern Adult Brand</p>
+      <h1 class="hero-title">THE NEW<br>CHAPTER</h1>
+    </div>
+  </section>
+
+  <!-- INTRO POETRY — BG: TNC_2 (body) -->
+  <section id="intro" class="bg-section">
+    <img src="uploads/TNC_2-03a5a913.JPG" alt="" class="bg-img">
+    <div class="bg-veil"></div>
+    <div class="intro-inner">
+      <div class="reveal">
+        <p class="intro-jp">
+          私たちを囲む見えない枠からするりと抜け出していくあなたが眩しくて、<br>
+          わたしは俯いた。<br><br>
+          その枠の外はあまり人気が無い。<br>
+          何故なら、すべてを自分で考え、選択しながら生きていかなくてはいけないから。<br>
+          面倒だから。今の枠内でうまく振る舞うほうが楽だから。<br><br>
+          それでもあなたは自らの手で新しい章を始める。<br>
+          それはきっと決まっていたことで、内なる衝動に近い。<br>
+          いずれわたしの姿だ。<br><br>
+          ようこそ、あなたの新しい章へ。<br>
+          一度知ってしまうと知らなかったころにはもう戻れない。<br>
+          でも、もう知ってしまったあなたへ。<br>
+          自らここにたどり着いたあなたへ。
+        </p>
+        <div class="divider"></div>
+        <p class="intro-en">
+          You sneak out of the invisible frame surrounding us and you are so bright,<br>
+          so I hang my head down.<br><br>
+          However, you will start with the new chapter in your own hands.<br>
+          Think you were somehow fated to do — it's close to an inner urge.<br><br>
+          Welcome to your own new chapter.<br>
+          Can't return to when you didn't know once you get to know.<br>
+          To you who already got to know.<br>
+          To you who reached here on your own.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT — BG: TNC_6 (lotion product) -->
+  <section id="about" class="bg-section">
+    <img src="uploads/TNC_6.JPG" alt="" class="bg-img">
+    <div class="bg-veil"></div>
+    <div class="about-inner">
+      <div class="reveal">
+        <p class="label">About</p>
+        <h2 class="display about-h">ABOUT THE<br><em>NEW CHAPTER</em></h2>
+        <p class="about-body">
+          どんなジェンダー・セクシャリティの人も手に取りやすいモダンなセクシャルウェルネスプロダクトを開発・販売。
+        </p>
+        <p class="about-body">
+          アイテムは、国産のオーガニック原料を使用したインティメイトケアローションと、スタイリッシュなコンドーム。
+        </p>
+        <p class="about-body">
+          アパレルセレクトショップやランジェリーショップにて取扱い有り。SNSにてジェンダーにまつわる発信や、オフラインイベントを開催している。
+        </p>
+        <div class="tags">
+          <span class="tag">国産オーガニック</span>
+          <span class="tag">インティメイトケア</span>
+          <span class="tag">コンドーム</span>
+          <span class="tag">ジェンダーフリー</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <img src="uploads/TNC_3-cbdf0fe4.JPG" alt="THE NEW CHAPTER products" class="about-product-img">
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY STRIP — TNC_1 / TNC_5 / TNC_7 -->
+  <section id="gallery">
+    <div class="gallery-item">
+      <img src="uploads/TNC_1.JPG" alt="THE NEW CHAPTER">
+    </div>
+    <div class="gallery-item">
+      <img src="uploads/TNC_5.JPG" alt="THE NEW CHAPTER">
+    </div>
+    <div class="gallery-item">
+      <img src="uploads/TNC_7.JPG" alt="THE NEW CHAPTER">
+    </div>
+  </section>
+
+  <!-- VISION — BG: TNC_5 (nautilus) -->
+  <section id="vision" class="bg-section">
+    <img src="uploads/TNC_5.JPG" alt="" class="bg-img" style="opacity:.18;">
+    <div class="bg-veil"></div>
+    <div class="vision-inner">
+      <div class="vision-top reveal">
+        <h2 class="display vision-h">OUR<br>VISION</h2>
+        <div class="vision-themes">
+          <p class="vision-theme">" 自らと対話する "</p>
+          <p class="vision-theme">" 性のジェンダーギャップをなくす "</p>
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="vision-body">
+          THE NEW CHAPTERは、包括的性教育を目的としています。<br><br>
+          日本は世界的に見て、性教育が充分ではありません。正しい性教育を受けていなければ、間違った情報に気付くことができません。それは性行為だけでなく、他者と関わりながら生きる日常生活にも支障をきたします。<br><br>
+          わたしたちは、包括的な性の知識＝リレーションシップの基盤と考え、すべての人が「NO」と「YES」を尊重し自分らしくいられる社会をめざしています。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING POEM — BG: TNC_1 (dark still life) -->
+  <section id="poem" class="bg-section">
+    <img src="uploads/TNC_1.JPG" alt="" class="bg-img">
+    <div class="bg-veil"></div>
+    <div class="poem-inner">
+      <div class="reveal">
+        <p class="poem-text">
+          自らと対話し、感覚を探す旅<br><br>
+          満たされた先では、世界のざわめきが輪郭を現す<br><br>
+          そしてあなたは、それぞれで在ることを許しあう、<br>
+          しなやかな境界線を見つける
+        </p>
+        <p class="poem-close">
+          日常のさまざまな場面で、鈍感にならざるを得ない忙しい現代。<br>
+          いつしか不快を無視するスキルばかりが上がっていく。<br><br>
+          立ち止まり、身体と心の感覚に誠実に向き合ってみる。<br>
+          自らを満たすことで、不快なものに敏感になり境界線を引けるようになる。<br><br>
+          自分との信頼関係を築くことは、他者へのコントールを超え<br>
+          ありのままを尊重し合う新しい章への鍵となります。
+        </p>
+        <div class="cta-wrap">
+          <p class="cta-note">Online Shop</p>
+          <a href="https://thenewchapter.net" target="_blank" rel="noopener" class="btn-shop">Shop THE NEW CHAPTER</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>THE NEW CHAPTER — by Akane Koizumi</span>
+    <a href="index.html">← Back to Portfolio</a>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('topNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('solid', window.scrollY > 60);
+    }, { passive: true });
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach((el, i) => {
+      el.style.transitionDelay = (i % 2) * 80 + 'ms';
+      io.observe(el);
+    });
+  </script>
+</body>
+</html>
