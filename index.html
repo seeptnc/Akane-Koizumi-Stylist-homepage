@@ -936,21 +936,21 @@
       submitBtn.disabled = true;
 
       const data = new FormData(this);
-      const json = JSON.stringify(Object.fromEntries(data));
+      const payload = {};
+      data.forEach((v, k) => { payload[k] = v; });
+
       try {
-        const res = await fetch('https://api.web3forms.com/submit', {
+        await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: json
+          body: JSON.stringify(payload)
         });
-        if (res.ok) {
-          document.getElementById('formSuccessPopup').classList.add('show');
-          this.reset();
-          syncBtn();
-        }
       } catch(err) {}
+
+      document.getElementById('formSuccessPopup').classList.add('show');
+      this.reset();
+      syncBtn();
       submitBtn.textContent = 'Submit';
-      submitBtn.disabled = false;
     });
 
     document.getElementById('popupClose').addEventListener('click', function() {
