@@ -91,7 +91,10 @@
       width: 22px;
       height: 1px;
       background: currentColor;
-      transition: transform .3s, opacity .3s;
+      transition: transform .3s, opacity .3s, background .35s;
+    }
+    #mainNav:not(.solid):not(.menu-open) .nav-toggle span {
+      background: #fff;
     }
     .nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
     .nav-toggle.open span:nth-child(2) { opacity: 0; }
@@ -126,8 +129,8 @@
     ════════════════════════════ */
     #home {
       position: relative;
-      height: 100vh;
-      min-height: 640px;
+      height: auto;
+      min-height: unset;
     }
     .hero-bg {
       position: absolute;
@@ -148,8 +151,8 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: 0 3rem 5.5rem;
+      justify-content: flex-start;
+      padding: 9rem 3rem 4rem;
     }
     .hero-eyebrow {
       font-size: .58rem;
@@ -224,6 +227,7 @@
     .about-text { padding-top: .5rem; }
     .about-h { font-size: clamp(2.2rem, 4vw, 4rem); margin-bottom: 2.5rem; }
     .about-bio {
+      font-family: 'Noto Serif JP', serif;
       font-size: .9rem;
       line-height: 2;
       color: #4a4a3f;
@@ -261,19 +265,24 @@
     .works-header { margin-bottom: 3.5rem; }
     .works-h { font-size: clamp(2.5rem, 5vw, 5rem); }
 
+    /* Carousel */
+    .carousel-wrap {
+      position: relative;
+      overflow: hidden;
+    }
     .works-grid {
-      columns: 3;
-      column-gap: 1.2rem;
+      display: flex;
+      gap: 1.2rem;
     }
     .work-item {
-      break-inside: avoid;
-      margin-bottom: 1.2rem;
+      flex: 0 0 calc(33.333% - .8rem);
       position: relative;
       overflow: hidden;
       cursor: pointer;
     }
     .work-item img {
       width: 100%;
+      display: block;
       transition: transform .7s cubic-bezier(.25,.46,.45,.94);
     }
     .work-item:hover img { transform: scale(1.05); }
@@ -291,6 +300,63 @@
       transition: opacity .3s;
     }
     .work-item:hover .work-cap { opacity: 1; }
+
+    .btn-see-more {
+      font-size: .6rem;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      transition: color .25s, border-color .25s;
+    }
+    .btn-see-more:hover { color: var(--fg); border-color: var(--fg); }
+
+    /* Carousel controls */
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .carousel-btn {
+      background: none;
+      border: 1px solid var(--border);
+      width: 2.8rem;
+      height: 2.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background .25s, border-color .25s;
+      flex-shrink: 0;
+    }
+    .carousel-btn:hover { background: var(--fg); border-color: var(--fg); }
+    .carousel-btn:hover svg { stroke: var(--bg); }
+    .carousel-btn svg { stroke: var(--fg); fill: none; stroke-width: 1.5; transition: stroke .25s; }
+    .carousel-dots {
+      display: flex;
+      gap: .5rem;
+      flex: 1;
+    }
+    .carousel-dot {
+      width: 20px;
+      height: 1px;
+      background: var(--border);
+      cursor: pointer;
+      transition: background .25s, width .25s;
+      border: none;
+      padding: 0;
+    }
+    .carousel-dot.active { background: var(--fg); width: 36px; }
+
+    @media (max-width: 960px) {
+      .work-item { flex: 0 0 calc(60% - .6rem); }
+    }
+    @media (max-width: 540px) {
+      .work-item { flex: 0 0 calc(80% - .6rem); }
+    }
 
     /* ════════════════════════════
        THE NEW CHAPTER
@@ -544,7 +610,7 @@
 
       #contact { padding: 6rem 1.5rem 5rem; }
 
-      .hero-content { padding: 0 1.5rem 3.5rem; }
+      .hero-content { padding: 5rem 1.5rem 3.5rem; }
       footer { padding: 1.5rem; flex-direction: column; gap: .5rem; text-align: center; }
     }
 
@@ -579,9 +645,7 @@
   </div>
 
   <!-- ── HOME ── -->
-  <section id="home" data-screen-label="Home">
-    <img src="image/1.jpg" alt="AKANE KOIZUMI — Styling work" class="hero-bg">
-    <div class="hero-veil"></div>
+  <section id="home" data-screen-label="Home" style="background: var(--dark-bg);">
     <div class="hero-content">
       <p class="hero-eyebrow">Stylist &ensp;/&ensp; Tokyo</p>
       <h1 class="hero-name">AKANE<br><em>KOIZUMI</em></h1>
@@ -593,7 +657,7 @@
     <div class="about-inner">
       <div class="about-text reveal">
         <p class="label">01 &ensp; About</p>
-        <h2 class="display about-h">Fashion Stylist<br><em>THE NEW CHAPTER</em> founder<br><br>AKANE KOIZUMI</h2>
+        <h2 class="display about-h"><span style="font-size:.7em;">Fashion Stylist<br><em>THE NEW CHAPTER</em> founder</span><br><br>AKANE KOIZUMI<br><span style="font-family:'Noto Serif JP',serif;font-size:.9rem;letter-spacing:.06em;">小泉　茜</span></h2>
         <p class="about-bio">
           アシスタントとしてキャリアをスタートし、ファッションスタイリストとして独立。国内外のトップブランドやクリエイターとのコラボレーションを重ねてきた。ミニマルな美意識と大胆なエディトリアル感覚が融合した、独自の世界観を持つ。
         </p>
@@ -624,32 +688,32 @@
     <div class="works-inner">
       <div class="works-header reveal">
         <p class="label">02 &ensp; Selected Works</p>
-        <h2 class="display works-h">Styling Works</h2>
+        <h2 class="display works-h">STYLING WORKS</h2>
       </div>
-      <div class="works-grid">
-        <div class="work-item reveal">
-          <img src="image/4.JPG" alt="Editorial — checkered dress">
-          <div class="work-cap">Editorial</div>
+      <div class="carousel-wrap">
+        <div class="works-grid" id="worksCarousel">
+          <div class="work-item"><img src="uploads/Styling%20works/1.JPG" alt="Styling Work 1"><div class="work-cap">Styling</div></div>
+          <div class="work-item"><img src="uploads/Styling%20works/2.JPG" alt="Styling Work 2"><div class="work-cap">Styling</div></div>
+          <div class="work-item"><img src="uploads/Styling%20works/3.JPG" alt="Styling Work 3"><div class="work-cap">Styling</div></div>
+          <div class="work-item"><img src="uploads/Styling%20works/4.JPG" alt="Styling Work 4"><div class="work-cap">Styling</div></div>
+          <div class="work-item"><img src="uploads/Styling%20works/5.JPG" alt="Styling Work 5"><div class="work-cap">Styling</div></div>
+          <div class="work-item"><img src="uploads/Styling%20works/6.JPG" alt="Styling Work 6"><div class="work-cap">Styling</div></div>
+          <div class="work-item"><img src="uploads/Styling%20works/7.JPG" alt="Styling Work 7"><div class="work-cap">Styling</div></div>
+          <div class="work-item"><img src="uploads/Styling%20works/8.JPG" alt="Styling Work 8"><div class="work-cap">Styling</div></div>
+          <div class="work-item"><img src="uploads/Styling%20works/9.JPG" alt="Styling Work 9"><div class="work-cap">Styling</div></div>
+          <div class="work-item"><img src="uploads/Styling%20works/10.jpeg" alt="Styling Work 10"><div class="work-cap">Styling</div></div>
         </div>
-        <div class="work-item reveal">
-          <img src="image/7.JPG" alt="Editorial — architectural">
-          <div class="work-cap">Editorial</div>
+        <div style="text-align:right; margin-top: 1.5rem; margin-bottom: .5rem;">
+          <a href="styling-works.html" class="btn-see-more">See More</a>
         </div>
-        <div class="work-item reveal">
-          <img src="image/3.JPG" alt="Street Style">
-          <div class="work-cap">Street Style</div>
-        </div>
-        <div class="work-item reveal">
-          <img src="image/1.jpg" alt="Editorial — orchids">
-          <div class="work-cap">Editorial</div>
-        </div>
-        <div class="work-item reveal">
-          <img src="image/2.JPG" alt="Campaign — nature">
-          <div class="work-cap">Campaign</div>
-        </div>
-        <div class="work-item reveal">
-          <img src="image/6.jpeg" alt="Portrait">
-          <div class="work-cap">Portrait</div>
+        <div class="carousel-controls">
+          <button class="carousel-btn" id="worksPrev" aria-label="前へ">
+            <svg width="16" height="16" viewBox="0 0 16 16"><polyline points="10,2 4,8 10,14"/></svg>
+          </button>
+          <div class="carousel-dots" id="worksDots"></div>
+          <button class="carousel-btn" id="worksNext" aria-label="次へ">
+            <svg width="16" height="16" viewBox="0 0 16 16"><polyline points="6,2 12,8 6,14"/></svg>
+          </button>
         </div>
       </div>
     </div>
@@ -668,15 +732,18 @@
         <p class="chapter-label">03 &ensp; New Brand</p>
         <h2 class="display chapter-h">THE NEW CHAPTER</h2>
         <p class="chapter-body">
-          <span style="font-family:'Noto Serif JP',serif;font-weight:300;">ようこそ、あなたの新しい章へ<br>
+          <span style="font-family:'Noto Serif JP',serif;font-weight:300;font-size:1.05rem;line-height:2.2;">ようこそ、あなたの新しい章へ<br>
           一度知ってしまうと知らなかったころにはもう戻れない<br>
           でももう知ってしまったあなたへ<br>
-          自らここにたどり着いたあなたへ</span><br><br>
+          自らここにたどり着いたあなたへ</span>
+        </p>
+        <hr style="border:none;border-top:1px solid rgba(229,226,219,.65);margin:2.5rem 0;">
+        <p class="chapter-body">
           THE NEW CHAPTERは「自分のままでいられる」をテーマに、国産オーガニックを用いたセクシャルウェルネスブランドです。
           <br><br>
           スタイリストとしての視点から「身にまとうもの」のもつ力を信じてきた小泉茜が、その哲学をより深く、よりパーソナルな領域へと広げた新たな章。
         </p>
-        <a href="the-new-chapter.html" class="btn-outline">Learn More</a>
+        <a href="the-new-chapter.html" class="btn-outline" style="margin-top:2.5rem;display:inline-block;">Learn More</a>
       </div>
     </div>
   </section>
@@ -685,7 +752,7 @@
   <section id="contact" data-screen-label="Contact">
     <div class="contact-inner reveal">
       <p class="contact-label">04 &ensp; Contact</p>
-      <h2 class="display contact-h">Get in<br><em>Touch</em></h2>
+      <h2 class="display contact-h">GET IN<br><em>TOUCH</em></h2>
       <p class="contact-note">
         お仕事のご依頼・ご相談はメールにてお気軽にどうぞ。<br>
         For work inquiries, please reach out via email.
@@ -733,7 +800,16 @@
     const menu  = document.getElementById('mobileMenu');
 
     function syncNav() {
-      nav.classList.toggle('solid', window.scrollY > 60);
+      const homeSection = document.getElementById('home');
+      const homeBottom  = homeSection ? homeSection.getBoundingClientRect().bottom : 0;
+      const inHero      = homeBottom > 60;
+      nav.classList.toggle('solid', !inHero);
+      /* ヒーロー（黒背景）内ではナビを白、それ以外はsolid側の色に任せる */
+      if (!nav.classList.contains('solid') && !nav.classList.contains('menu-open')) {
+        nav.style.color = '#fff';
+      } else {
+        nav.style.color = '';
+      }
     }
     window.addEventListener('scroll', syncNav, { passive: true });
     syncNav();
@@ -769,6 +845,52 @@
       el.style.transitionDelay = (i % 3) * 80 + 'ms';
       io.observe(el);
     });
+
+    /* ── Carousel ── */
+    (function() {
+      const track  = document.getElementById('worksCarousel');
+      const items  = track.querySelectorAll('.work-item');
+      const dotsEl = document.getElementById('worksDots');
+      let current  = 0;
+
+      // build dots
+      items.forEach((_, i) => {
+        const d = document.createElement('button');
+        d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => goTo(i));
+        dotsEl.appendChild(d);
+      });
+
+      function visibleCount() {
+        const w = track.parentElement.offsetWidth;
+        if (w >= 960) return 3;
+        if (w >= 540) return 1.5;
+        return 1.2;
+      }
+
+      function goTo(idx) {
+        const count = Math.floor(visibleCount());
+        const max   = items.length - count;
+        current = Math.max(0, Math.min(idx, max));
+        const itemW = items[0].offsetWidth + 19.2; // gap 1.2rem≈19.2px
+        track.style.transform = `translateX(-${current * itemW}px)`;
+        track.style.transition = 'transform .55s cubic-bezier(.25,.46,.45,.94)';
+        dotsEl.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === current));
+      }
+
+      document.getElementById('worksPrev').addEventListener('click', () => goTo(current - 1));
+      document.getElementById('worksNext').addEventListener('click', () => goTo(current + 1));
+
+      // touch / swipe
+      let startX = 0;
+      track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+      track.addEventListener('touchend',   e => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
+      });
+
+      window.addEventListener('resize', () => goTo(current));
+    })();
 
     /* Contact form — required validation + FormSubmit AJAX */
     const submitBtn = document.getElementById('submitBtn');
