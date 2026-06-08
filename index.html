@@ -930,27 +930,23 @@
     }
     watchIds.forEach(id => document.getElementById(id).addEventListener('input', syncBtn));
 
-    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      submitBtn.textContent = 'Sending...';
-      submitBtn.disabled = true;
 
-      const data = new FormData(this);
       const payload = {};
-      data.forEach((v, k) => { payload[k] = v; });
+      new FormData(this).forEach((v, k) => { payload[k] = v; });
 
-      try {
-        await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-      } catch(err) {}
+      // バックグラウンドで送信
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(function() {});
 
+      // 即座にポップアップ表示
       document.getElementById('formSuccessPopup').classList.add('show');
       this.reset();
       syncBtn();
-      submitBtn.textContent = 'Submit';
     });
 
     document.getElementById('popupClose').addEventListener('click', function() {
