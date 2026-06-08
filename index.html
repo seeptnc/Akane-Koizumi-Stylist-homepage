@@ -20,6 +20,9 @@
       --dark-fg:  #e5e2db;
     }
 
+    #formSuccessPopup { display: none; }
+    #formSuccessPopup.show { display: flex; }
+
     html { scroll-behavior: smooth; }
 
     body {
@@ -759,10 +762,9 @@
       </p>
       <a href="mailto:akanekoizumi06@gmail.com" class="contact-email">akanekoizumi06@gmail.com</a>
       <!-- Contact Form -->
-      <form class="contact-form" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+      <form class="contact-form" id="contactForm">
         <input type="hidden" name="access_key" value="47934db3-a787-499e-9bf5-08cf0ee94ba8">
         <input type="hidden" name="subject" value="【Website】お問い合わせ">
-        <input type="hidden" name="redirect" value="https://seeptnc.github.io/Akane-Koizumi-Stylist-homepage/">
         <div class="form-row">
           <div class="form-field">
             <label for="f-name">Name *</label>
@@ -789,6 +791,31 @@
       </ul>
     </div>
   </section>
+
+  <!-- Success Popup -->
+  <div id="formSuccessPopup" style="
+    display:none;
+    position:fixed;inset:0;z-index:2000;
+    background:rgba(0,0,0,.45);
+    align-items:center;justify-content:center;
+  ">
+    <div style="
+      background:var(--bg);
+      padding:3.5rem 3rem;
+      max-width:420px;width:90%;
+      text-align:center;
+    ">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;letter-spacing:.04em;margin-bottom:.75rem;">Thank you.</p>
+      <p style="font-size:.85rem;color:var(--muted);letter-spacing:.06em;margin-bottom:2rem;">Your message has been sent.</p>
+      <button id="popupClose" style="
+        font-family:'DM Sans',sans-serif;
+        font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;
+        background:none;border:1px solid var(--border);
+        padding:.75rem 2rem;cursor:pointer;
+        transition:background .3s,color .3s;
+      ">Close</button>
+    </div>
+  </div>
 
   <footer>
     <span>© 2026 Akane Koizumi</span>
@@ -904,9 +931,31 @@
     }
     watchIds.forEach(id => document.getElementById(id).addEventListener('input', syncBtn));
 
-    document.getElementById('contactForm').addEventListener('submit', function() {
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
       submitBtn.textContent = 'Sending...';
       submitBtn.disabled = true;
+
+      const data = new FormData(this);
+      const json = JSON.stringify(Object.fromEntries(data));
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: json
+        });
+        if (res.ok) {
+          document.getElementById('formSuccessPopup').classList.add('show');
+          this.reset();
+          syncBtn();
+        }
+      } catch(err) {}
+      submitBtn.textContent = 'Submit';
+      submitBtn.disabled = false;
+    });
+
+    document.getElementById('popupClose').addEventListener('click', function() {
+      document.getElementById('formSuccessPopup').classList.remove('show');
     });
   </script>
 </body>
