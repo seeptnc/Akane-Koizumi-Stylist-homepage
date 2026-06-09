@@ -96,7 +96,8 @@
       background: currentColor;
       transition: transform .3s, opacity .3s, background .35s;
     }
-    #mainNav:not(.solid):not(.menu-open) .nav-toggle span {
+    #mainNav:not(.solid):not(.menu-open) .nav-toggle span,
+    #mainNav.solid .nav-toggle span {
       background: #fff;
     }
     .nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
